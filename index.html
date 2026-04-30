@@ -3,117 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mening Kunlik Yordamchim</title>
+    <title>Kunlik Yordamchim - PRO</title>
     <style>
         /* ASOSIY DIZAYN */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            min-height: 100vh;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%); 
+            margin: 0; 
+            padding: 20px; 
+            color: #333; 
+            min-height: 100vh; 
+        }
+        
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); margin-bottom: 5px; }
+        #soat { 
+            font-size: 30px; font-weight: bold; color: #fff; 
+            background: rgba(0, 0, 0, 0.2); padding: 10px 20px; 
+            border-radius: 10px; display: inline-block; letter-spacing: 2px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: flex-start; }
+        
+        /* QUTILARI */
+        .box { 
+            background: #fff; padding: 25px; border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 100%; max-width: 420px; 
+        }
+        .box h2 { margin-top: 0; color: #4a69bd; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
+        
+        /* KIRITISH JOYI VA TUGMALAR */
+        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        input[type="text"], input[type="time"], textarea { 
+            width: 100%; padding: 12px; border: 1px solid #dcdde1; 
+            border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s; 
+        }
+        input[type="time"] { max-width: 110px; cursor: pointer; }
+        input:focus, textarea:focus { border-color: #4a69bd; box-shadow: 0 0 8px rgba(74, 105, 189, 0.3); }
+        textarea { height: 80px; resize: none; margin-bottom: 10px; }
+        
+        button { 
+            background: #4a69bd; color: white; border: none; padding: 12px 18px; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; 
+        }
+        button:hover { background: #3c55a5; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        /* RO'YXATLAR VA SAQLANGANLAR BO'LIMI */
+        h3 { color: #2f3640; font-size: 16px; margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        ul { list-style-type: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; overflow-x: hidden; }
+        
+        li { 
+            background: #f8f9fa; margin-bottom: 10px; padding: 12px; 
+            border-radius: 8px; display: flex; justify-content: space-between; 
+            align-items: center; border-left: 4px solid #4a69bd; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        /* XATONI TO'G'RILOVCHI KOD (Yozuvlar toshib ketmaydi) */
+        .content-box { 
+            display: flex; flex-direction: column; gap: 5px; 
+            width: 100%; margin-right: 10px; min-width: 0; 
+            word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
         }
 
-        .header h1 {
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            margin-bottom: 5px;
-        }
+        /* VAZIFANI BAJARILGAN QILISH UCHUN DIZAYN */
+        .task-text { cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .task-text:hover { color: #4a69bd; }
+        .completed { text-decoration: line-through; color: #a4b0be; font-style: italic; }
 
-        /* JONLI SOAT DIZAYNI */
-        #soat {
-            font-size: 30px;
-            font-weight: bold;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .box h2 {
-            margin-top: 0;
-            color: #4a69bd;
-            border-bottom: 2px solid #f1f2f6;
-            padding-bottom: 10px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        button {
-            background: #4a69bd;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #3c55a5;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            background: #f1f2f6;
-            margin-bottom: 8px;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        li button {
-            background: #e55039;
-            padding: 5px 10px;
-        }
-
-        li button:hover {
-            background: #c0392b;
-        }
+        .time-badge { font-size: 12px; background: #e1b12c; color: #fff; padding: 3px 8px; border-radius: 12px; font-weight: bold; width: max-content; }
+        .date-badge { font-size: 11px; color: #7f8fa6; font-style: italic; }
+        
+        .delete-btn { background: #e55039; padding: 8px 12px; border-radius: 6px; }
+        .delete-btn:hover { background: #c0392b; transform: none; }
+        
+        /* Skroll chizig'ini chiroyli qilish */
+        ul::-webkit-scrollbar { width: 6px; }
+        ul::-webkit-scrollbar-thumb { background-color: #dcdde1; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -126,8 +92,9 @@
     <div class="container">
         <div class="box">
             <h2>📝 Kunlik Rejalar</h2>
-            <div style="display: flex; gap: 10px;">
+            <div class="input-group">
                 <input type="text" id="yangi-vazifa" placeholder="Nima ish qilamiz?">
+                <input type="time" id="vazifa-vaqti" title="Vaqtni tanlang">
                 <button onclick="vazifaQoshish()">Qo'shish</button>
             </div>
             <ul id="vazifalar-royxati"></ul>
@@ -135,45 +102,89 @@
 
         <div class="box">
             <h2>📒 Tezkor Qaydlar</h2>
-            <textarea id="bloknot" placeholder="Muhim narsalarni shu yerga yozib qo'ying..."></textarea>
-            <button onclick="qaydniSaqlash()" style="width: 100%;">Saqlash</button>
+            <textarea id="bloknot" placeholder="Muhim ma'lumot, g'oya yoki parollarni yozing..."></textarea>
+            <button onclick="qaydQoshish()" style="width: 100%;">Saqlash</button>
+            
+            <h3>💾 Saqlanganlar</h3>
+            <ul id="qaydlar-royxati"></ul>
         </div>
     </div>
 
     <script>
-        // SOAT
+        // --- 1. JONLI SOAT ---
         setInterval(function() {
             let hozir = new Date();
             document.getElementById('soat').innerText = hozir.toLocaleTimeString('uz-UZ');
         }, 1000);
 
-        // VAZIFALAR RO'YXATI
-        let royxat = document.getElementById('vazifalar-royxati');
-        royxat.innerHTML = localStorage.getItem('saqlanganVazifalar') || '';
+        // --- 2. VAZIFALAR MANTIQI ---
+        let vazifaRoyxati = document.getElementById('vazifalar-royxati');
+        vazifaRoyxati.innerHTML = localStorage.getItem('proVazifalarV2') || '';
 
         function vazifaQoshish() {
-            let kiritilganMatn = document.getElementById('yangi-vazifa').value;
-            if(kiritilganMatn === '') return; 
+            let matn = document.getElementById('yangi-vazifa').value;
+            let vaqt = document.getElementById('vazifa-vaqti').value;
+            
+            if(matn.trim() === '') return; 
 
-            let yangiQator = `<li>${kiritilganMatn} <button onclick="this.parentElement.remove(); vazifalarniSaqlash()">X</button></li>`;
-            royxat.innerHTML += yangiQator;
+            let vaqtHTML = vaqt ? `<span class="time-badge">⏰ ${vaqt}</span>` : '';
+
+            let li = `
+                <li>
+                    <div class="content-box">
+                        ${vaqtHTML}
+                        <span class="task-text" onclick="bajarildiQilish(this)">${matn}</span>
+                    </div>
+                    <button class="delete-btn" onclick="this.parentElement.remove(); vazifaSaqlash()">X</button>
+                </li>
+            `;
+            
+            vazifaRoyxati.insertAdjacentHTML('afterbegin', li);
+            
             document.getElementById('yangi-vazifa').value = ''; 
-            vazifalarniSaqlash();
+            document.getElementById('vazifa-vaqti').value = ''; 
+            
+            vazifaSaqlash();
         }
 
-        function vazifalarniSaqlash() {
-            localStorage.setItem('saqlanganVazifalar', royxat.innerHTML);
+        // Vazifani bajarilgan qilib chizish funksiyasi
+        function bajarildiQilish(element) {
+            element.classList.toggle('completed'); // 'completed' klassini qo'shadi yoki olib tashlaydi
+            vazifaSaqlash(); // O'zgarishni xotiraga saqlaydi
         }
 
-        // TEZKOR BLOKNOT
-        let bloknotQutisi = document.getElementById('bloknot');
-        bloknotQutisi.value = localStorage.getItem('saqlanganQaydlar') || '';
+        function vazifaSaqlash() {
+            localStorage.setItem('proVazifalarV2', vazifaRoyxati.innerHTML);
+        }
 
-        function qaydniSaqlash() {
-            localStorage.setItem('saqlanganQaydlar', bloknotQutisi.value);
-            let btn = event.target;
-            btn.innerText = "Saqlandi ✔️";
-            setTimeout(() => btn.innerText = "Saqlash", 1500);
+        // --- 3. TEZKOR QAYDLAR VA SAQLANGANLAR MANTIQI ---
+        let qaydRoyxati = document.getElementById('qaydlar-royxati');
+        qaydRoyxati.innerHTML = localStorage.getItem('proQaydlarV2') || '';
+
+        function qaydQoshish() {
+            let qaydMatni = document.getElementById('bloknot').value;
+            if(qaydMatni.trim() === '') return;
+
+            let sana = new Date().toLocaleString('uz-UZ');
+
+            let li = `
+                <li>
+                    <div class="content-box">
+                        <span class="date-badge">Sana: ${sana}</span>
+                        <span class="task-text">${qaydMatni}</span>
+                    </div>
+                    <button class="delete-btn" onclick="this.parentElement.remove(); qaydSaqlash()">X</button>
+                </li>
+            `;
+
+            qaydRoyxati.insertAdjacentHTML('afterbegin', li);
+            document.getElementById('bloknot').value = ''; 
+            
+            qaydSaqlash();
+        }
+
+        function qaydSaqlash() {
+            localStorage.setItem('proQaydlarV2', qaydRoyxati.innerHTML);
         }
     </script>
 
