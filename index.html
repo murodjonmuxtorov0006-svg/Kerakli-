@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kunlik Yordamchim - PRO MAX</title>
     <style>
-        /* ASOSIY DIZAYN */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%); 
@@ -25,17 +24,14 @@
 
         .container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: flex-start; }
         
-        /* QUTILARI */
         .box { 
             background: #fff; padding: 25px; border-radius: 15px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 100%; max-width: 450px; 
         }
         .box h2 { margin-top: 0; color: #4a69bd; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
         
-        /* KIRITISH JOYI VA TUGMALAR */
         .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         
-        /* Taymer kiritish maydonlari dizayni */
         .timer-inputs { display: flex; gap: 5px; align-items: center; }
         .timer-inputs input { width: 30%; text-align: center; }
         .timer-inputs span { font-weight: bold; color: #7f8fa6; }
@@ -43,7 +39,7 @@
         input[type="text"], input[type="number"], textarea { 
             width: 100%; padding: 12px; border: 1px solid #dcdde1; 
             border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s; 
-            box-sizing: border-box; /* Muhim: qutidan toshib ketmasligi uchun */
+            box-sizing: border-box; 
         }
         
         input:focus, textarea:focus { border-color: #4a69bd; box-shadow: 0 0 8px rgba(74, 105, 189, 0.3); }
@@ -55,7 +51,6 @@
         }
         button:hover { background: #3c55a5; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* RO'YXATLAR VA SAQLANGANLAR BO'LIMI */
         h3 { color: #2f3640; font-size: 16px; margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         ul { list-style-type: none; padding: 0; margin: 0; max-height: 350px; overflow-y: auto; overflow-x: hidden; }
         
@@ -66,13 +61,8 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 10px;
         }
         
-        /* XATONI TO'G'RILOVCHI KOD (Yozuvlar toshib ketmaydi) - Ikkala quti uchun ham ishlaydi */
-        .content-box { 
-            display: flex; flex-direction: column; gap: 5px; 
-            width: 100%; min-width: 0; /* Toshishning oldini oladi */
-        }
+        .content-box { display: flex; flex-direction: column; gap: 5px; width: 100%; min-width: 0; }
         
-        /* So'zlarni majburlab bo'lish */
         .task-text, .note-text { 
             word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; hyphens: auto; 
             font-size: 15px; cursor: pointer; transition: 0.3s; 
@@ -81,17 +71,15 @@
         .task-text:hover { color: #4a69bd; }
         .completed { text-decoration: line-through; color: #a4b0be; font-style: italic; }
 
-        /* Taymer ko'rinishi */
         .timer-badge { 
             font-size: 13px; background: #e1b12c; color: #fff; padding: 4px 10px; 
             border-radius: 12px; font-weight: bold; width: max-content; font-family: monospace; letter-spacing: 1px;
         }
-        /* Taymer tugagandagi qizil holat */
         .timer-ended { background: #e55039; }
 
         .date-badge { font-size: 11px; color: #7f8fa6; font-style: italic; }
         
-        .delete-btn { background: #e55039; padding: 8px 12px; border-radius: 6px; flex-shrink: 0; /* Tugma qisilib qolmaydi */ }
+        .delete-btn { background: #e55039; padding: 8px 12px; border-radius: 6px; flex-shrink: 0; }
         .delete-btn:hover { background: #c0392b; transform: none; }
         
         ul::-webkit-scrollbar { width: 6px; }
@@ -133,21 +121,21 @@
     </div>
 
     <script>
-        // --- 1. JONLI SOAT ---
+        // SOAT
         setInterval(function() {
             let hozir = new Date();
             document.getElementById('soat').innerText = hozir.toLocaleTimeString('uz-UZ');
         }, 1000);
 
-        // --- 2. VAZIFALAR MANTIQI VA TAYMER ---
+        // VAZIFALAR MANTIQI
         let vazifaRoyxati = document.getElementById('vazifalar-royxati');
-        let vazifalarBazasi = JSON.parse(localStorage.getItem('proMaxVazifalar')) || [];
-        
-        // Barcha interval ID larni saqlash uchun array (taymerlarni to'xtatish uchun)
+        let vazifalarBazasi = JSON.parse(localStorage.getItem('proMaxVazifalarV3')) || [];
         let timerIntervals = [];
 
+        // Ovozli signal (Budilnik ovozi)
+        let alarmSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
         function ekrangaVazifalarniChiqarish() {
-            // Avval ekranni va barcha ishlayotgan taymerlarni tozalaymiz
             vazifaRoyxati.innerHTML = '';
             timerIntervals.forEach(clearInterval);
             timerIntervals = [];
@@ -155,12 +143,10 @@
             vazifalarBazasi.forEach((vazifa, index) => {
                 let taymerHTML = '';
                 
-                // Agar vaqt (sekundlarda) kiritilgan bo'lsa
                 if (vazifa.qolganVaqt > 0) {
                     taymerHTML = `<span class="timer-badge" id="taymer-${index}">Hisoblanmoqda...</span>`;
                     taymerniBoshlash(index, vazifa.qolganVaqt);
                 } else if (vazifa.qolganVaqt === 0) {
-                    // Taymer tugagan bo'lsa
                     taymerHTML = `<span class="timer-badge timer-ended">Vaqt tugadi!</span>`;
                 }
 
@@ -175,7 +161,7 @@
                         <button class="delete-btn" onclick="vazifaniOchirish(${index})">X</button>
                     </li>
                 `;
-                vazifaRoyxati.insertAdjacentHTML('beforeend', li); // Tepadagilar tepada qoladi (Tartib bilan)
+                vazifaRoyxati.insertAdjacentHTML('beforeend', li);
             });
         }
 
@@ -184,6 +170,19 @@
                 if (jamiSekundlar <= 0) {
                     clearInterval(intervalId);
                     vazifalarBazasi[index].qolganVaqt = 0;
+                    
+                    // YANGILIK: Agar oldin ogohlantirilmagan bo'lsa, ogohlantiradi
+                    if (!vazifalarBazasi[index].ogohlantirildi) {
+                        alarmSound.play().catch(e => console.log("Brauzer ovozga ruxsat bermadi"));
+                        
+                        // Ekrandagi ma'lumotlar yangilanishiga ulgurishi uchun 100 millisekund kutamiz
+                        setTimeout(() => {
+                            alert("⏰ Siz belgilagan vaqtingiz tugadi!\n\nVazifa: " + vazifalarBazasi[index].matn);
+                        }, 100);
+                        
+                        vazifalarBazasi[index].ogohlantirildi = true; // Faqat 1 marta chiqishi uchun belgilaymiz
+                    }
+
                     vazifaSaqlash();
                     ekrangaVazifalarniChiqarish();
                     return;
@@ -192,12 +191,10 @@
                 jamiSekundlar--;
                 vazifalarBazasi[index].qolganVaqt = jamiSekundlar;
 
-                // Matematik hisob-kitoblar (sekundni soat, minut, sekundga ajratish)
                 let s = Math.floor(jamiSekundlar / 3600);
                 let m = Math.floor((jamiSekundlar % 3600) / 60);
                 let sek = jamiSekundlar % 60;
 
-                // Bittalik sonlarga 0 qo'shish (masalan 9 o'rniga 09)
                 let formatlanganVaqt = `⏳ ${s.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sek.toString().padStart(2, '0')}`;
                 
                 let taymerElementi = document.getElementById(`taymer-${index}`);
@@ -206,7 +203,7 @@
                 }
             }, 1000);
             
-            timerIntervals.push(intervalId); // Intervalni saqlab qo'yamiz
+            timerIntervals.push(intervalId);
         }
 
         function vazifaQoshish() {
@@ -217,22 +214,19 @@
             
             if(matn.trim() === '') return; 
 
-            // Hamma vaqtni umumiy sekundlarga aylantiramiz
             let jamiSekundlar = (soat * 3600) + (minut * 60) + sekund;
 
-            // Agar vaqt kiritilmagan bo'lsa, qolganVaqt qiymatini null qilib qo'yamiz
             if (jamiSekundlar === 0 && soat === 0 && minut === 0 && sekund === 0) {
                 jamiSekundlar = -1; 
             }
 
-            // Yangi vazifani array (ro'yxat) ning boshiga qo'shamiz
             vazifalarBazasi.unshift({
                 matn: matn,
                 bajarildi: false,
-                qolganVaqt: jamiSekundlar
+                qolganVaqt: jamiSekundlar,
+                ogohlantirildi: false // Yangi vazifa hali ogohlantirilmadi
             });
             
-            // Inputlarni tozalash
             document.getElementById('yangi-vazifa').value = ''; 
             document.getElementById('soat-kiritish').value = ''; 
             document.getElementById('minut-kiritish').value = ''; 
@@ -243,28 +237,26 @@
         }
 
         function vazifaniOchirish(index) {
-            vazifalarBazasi.splice(index, 1); // Ro'yxatdan o'chirib tashlaydi
+            vazifalarBazasi.splice(index, 1);
             vazifaSaqlash();
             ekrangaVazifalarniChiqarish();
         }
 
         function bajarildiQilish(index) {
-            vazifalarBazasi[index].bajarildi = !vazifalarBazasi[index].bajarildi; // True ni false, false ni true qiladi
+            vazifalarBazasi[index].bajarildi = !vazifalarBazasi[index].bajarildi;
             vazifaSaqlash();
             ekrangaVazifalarniChiqarish();
         }
 
         function vazifaSaqlash() {
-            localStorage.setItem('proMaxVazifalar', JSON.stringify(vazifalarBazasi));
+            localStorage.setItem('proMaxVazifalarV3', JSON.stringify(vazifalarBazasi));
         }
 
-        // Sayt ishga tushganda vazifalarni ekranga chiqarish
         ekrangaVazifalarniChiqarish();
 
-
-        // --- 3. TEZKOR QAYDLAR MANTIQI ---
+        // QAYDLAR MANTIQI
         let qaydRoyxati = document.getElementById('qaydlar-royxati');
-        qaydRoyxati.innerHTML = localStorage.getItem('proMaxQaydlar') || '';
+        qaydRoyxati.innerHTML = localStorage.getItem('proMaxQaydlarV3') || '';
 
         function qaydQoshish() {
             let qaydMatni = document.getElementById('bloknot').value;
@@ -289,7 +281,7 @@
         }
 
         function qaydSaqlash() {
-            localStorage.setItem('proMaxQaydlar', qaydRoyxati.innerHTML);
+            localStorage.setItem('proMaxQaydlarV3', qaydRoyxati.innerHTML);
         }
     </script>
 
