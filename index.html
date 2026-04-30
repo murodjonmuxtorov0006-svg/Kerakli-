@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kunlik Yordamchim - PRO</title>
+    <title>Kunlik Yordamchim - PRO MAX</title>
     <style>
         /* ASOSIY DIZAYN */
         body { 
@@ -28,56 +28,72 @@
         /* QUTILARI */
         .box { 
             background: #fff; padding: 25px; border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 100%; max-width: 420px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 100%; max-width: 450px; 
         }
         .box h2 { margin-top: 0; color: #4a69bd; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
         
         /* KIRITISH JOYI VA TUGMALAR */
-        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        input[type="text"], input[type="time"], textarea { 
+        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        
+        /* Taymer kiritish maydonlari dizayni */
+        .timer-inputs { display: flex; gap: 5px; align-items: center; }
+        .timer-inputs input { width: 30%; text-align: center; }
+        .timer-inputs span { font-weight: bold; color: #7f8fa6; }
+
+        input[type="text"], input[type="number"], textarea { 
             width: 100%; padding: 12px; border: 1px solid #dcdde1; 
             border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s; 
+            box-sizing: border-box; /* Muhim: qutidan toshib ketmasligi uchun */
         }
-        input[type="time"] { max-width: 110px; cursor: pointer; }
+        
         input:focus, textarea:focus { border-color: #4a69bd; box-shadow: 0 0 8px rgba(74, 105, 189, 0.3); }
         textarea { height: 80px; resize: none; margin-bottom: 10px; }
         
         button { 
             background: #4a69bd; color: white; border: none; padding: 12px 18px; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; 
         }
         button:hover { background: #3c55a5; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
         /* RO'YXATLAR VA SAQLANGANLAR BO'LIMI */
         h3 { color: #2f3640; font-size: 16px; margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        ul { list-style-type: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; overflow-x: hidden; }
+        ul { list-style-type: none; padding: 0; margin: 0; max-height: 350px; overflow-y: auto; overflow-x: hidden; }
         
         li { 
             background: #f8f9fa; margin-bottom: 10px; padding: 12px; 
             border-radius: 8px; display: flex; justify-content: space-between; 
             align-items: center; border-left: 4px solid #4a69bd; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 10px;
         }
         
-        /* XATONI TO'G'RILOVCHI KOD (Yozuvlar toshib ketmaydi) */
+        /* XATONI TO'G'RILOVCHI KOD (Yozuvlar toshib ketmaydi) - Ikkala quti uchun ham ishlaydi */
         .content-box { 
             display: flex; flex-direction: column; gap: 5px; 
-            width: 100%; margin-right: 10px; min-width: 0; 
-            word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
+            width: 100%; min-width: 0; /* Toshishning oldini oladi */
+        }
+        
+        /* So'zlarni majburlab bo'lish */
+        .task-text, .note-text { 
+            word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; hyphens: auto; 
+            font-size: 15px; cursor: pointer; transition: 0.3s; 
         }
 
-        /* VAZIFANI BAJARILGAN QILISH UCHUN DIZAYN */
-        .task-text { cursor: pointer; transition: 0.3s; font-size: 15px; }
         .task-text:hover { color: #4a69bd; }
         .completed { text-decoration: line-through; color: #a4b0be; font-style: italic; }
 
-        .time-badge { font-size: 12px; background: #e1b12c; color: #fff; padding: 3px 8px; border-radius: 12px; font-weight: bold; width: max-content; }
+        /* Taymer ko'rinishi */
+        .timer-badge { 
+            font-size: 13px; background: #e1b12c; color: #fff; padding: 4px 10px; 
+            border-radius: 12px; font-weight: bold; width: max-content; font-family: monospace; letter-spacing: 1px;
+        }
+        /* Taymer tugagandagi qizil holat */
+        .timer-ended { background: #e55039; }
+
         .date-badge { font-size: 11px; color: #7f8fa6; font-style: italic; }
         
-        .delete-btn { background: #e55039; padding: 8px 12px; border-radius: 6px; }
+        .delete-btn { background: #e55039; padding: 8px 12px; border-radius: 6px; flex-shrink: 0; /* Tugma qisilib qolmaydi */ }
         .delete-btn:hover { background: #c0392b; transform: none; }
         
-        /* Skroll chizig'ini chiroyli qilish */
         ul::-webkit-scrollbar { width: 6px; }
         ul::-webkit-scrollbar-thumb { background-color: #dcdde1; border-radius: 10px; }
     </style>
@@ -94,7 +110,13 @@
             <h2>📝 Kunlik Rejalar</h2>
             <div class="input-group">
                 <input type="text" id="yangi-vazifa" placeholder="Nima ish qilamiz?">
-                <input type="time" id="vazifa-vaqti" title="Vaqtni tanlang">
+                <div class="timer-inputs">
+                    <input type="number" id="soat-kiritish" placeholder="Soat" min="0" max="23">
+                    <span>:</span>
+                    <input type="number" id="minut-kiritish" placeholder="Min" min="0" max="59">
+                    <span>:</span>
+                    <input type="number" id="sekund-kiritish" placeholder="Sek" min="0" max="59">
+                </div>
                 <button onclick="vazifaQoshish()">Qo'shish</button>
             </div>
             <ul id="vazifalar-royxati"></ul>
@@ -117,49 +139,132 @@
             document.getElementById('soat').innerText = hozir.toLocaleTimeString('uz-UZ');
         }, 1000);
 
-        // --- 2. VAZIFALAR MANTIQI ---
+        // --- 2. VAZIFALAR MANTIQI VA TAYMER ---
         let vazifaRoyxati = document.getElementById('vazifalar-royxati');
-        vazifaRoyxati.innerHTML = localStorage.getItem('proVazifalarV2') || '';
+        let vazifalarBazasi = JSON.parse(localStorage.getItem('proMaxVazifalar')) || [];
+        
+        // Barcha interval ID larni saqlash uchun array (taymerlarni to'xtatish uchun)
+        let timerIntervals = [];
+
+        function ekrangaVazifalarniChiqarish() {
+            // Avval ekranni va barcha ishlayotgan taymerlarni tozalaymiz
+            vazifaRoyxati.innerHTML = '';
+            timerIntervals.forEach(clearInterval);
+            timerIntervals = [];
+
+            vazifalarBazasi.forEach((vazifa, index) => {
+                let taymerHTML = '';
+                
+                // Agar vaqt (sekundlarda) kiritilgan bo'lsa
+                if (vazifa.qolganVaqt > 0) {
+                    taymerHTML = `<span class="timer-badge" id="taymer-${index}">Hisoblanmoqda...</span>`;
+                    taymerniBoshlash(index, vazifa.qolganVaqt);
+                } else if (vazifa.qolganVaqt === 0) {
+                    // Taymer tugagan bo'lsa
+                    taymerHTML = `<span class="timer-badge timer-ended">Vaqt tugadi!</span>`;
+                }
+
+                let bajarilganClass = vazifa.bajarildi ? 'completed' : '';
+
+                let li = `
+                    <li>
+                        <div class="content-box">
+                            ${taymerHTML}
+                            <span class="task-text ${bajarilganClass}" onclick="bajarildiQilish(${index})">${vazifa.matn}</span>
+                        </div>
+                        <button class="delete-btn" onclick="vazifaniOchirish(${index})">X</button>
+                    </li>
+                `;
+                vazifaRoyxati.insertAdjacentHTML('beforeend', li); // Tepadagilar tepada qoladi (Tartib bilan)
+            });
+        }
+
+        function taymerniBoshlash(index, jamiSekundlar) {
+            let intervalId = setInterval(() => {
+                if (jamiSekundlar <= 0) {
+                    clearInterval(intervalId);
+                    vazifalarBazasi[index].qolganVaqt = 0;
+                    vazifaSaqlash();
+                    ekrangaVazifalarniChiqarish();
+                    return;
+                }
+
+                jamiSekundlar--;
+                vazifalarBazasi[index].qolganVaqt = jamiSekundlar;
+
+                // Matematik hisob-kitoblar (sekundni soat, minut, sekundga ajratish)
+                let s = Math.floor(jamiSekundlar / 3600);
+                let m = Math.floor((jamiSekundlar % 3600) / 60);
+                let sek = jamiSekundlar % 60;
+
+                // Bittalik sonlarga 0 qo'shish (masalan 9 o'rniga 09)
+                let formatlanganVaqt = `⏳ ${s.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sek.toString().padStart(2, '0')}`;
+                
+                let taymerElementi = document.getElementById(`taymer-${index}`);
+                if (taymerElementi) {
+                    taymerElementi.innerText = formatlanganVaqt;
+                }
+            }, 1000);
+            
+            timerIntervals.push(intervalId); // Intervalni saqlab qo'yamiz
+        }
 
         function vazifaQoshish() {
             let matn = document.getElementById('yangi-vazifa').value;
-            let vaqt = document.getElementById('vazifa-vaqti').value;
+            let soat = Number(document.getElementById('soat-kiritish').value) || 0;
+            let minut = Number(document.getElementById('minut-kiritish').value) || 0;
+            let sekund = Number(document.getElementById('sekund-kiritish').value) || 0;
             
             if(matn.trim() === '') return; 
 
-            let vaqtHTML = vaqt ? `<span class="time-badge">⏰ ${vaqt}</span>` : '';
+            // Hamma vaqtni umumiy sekundlarga aylantiramiz
+            let jamiSekundlar = (soat * 3600) + (minut * 60) + sekund;
 
-            let li = `
-                <li>
-                    <div class="content-box">
-                        ${vaqtHTML}
-                        <span class="task-text" onclick="bajarildiQilish(this)">${matn}</span>
-                    </div>
-                    <button class="delete-btn" onclick="this.parentElement.remove(); vazifaSaqlash()">X</button>
-                </li>
-            `;
+            // Agar vaqt kiritilmagan bo'lsa, qolganVaqt qiymatini null qilib qo'yamiz
+            if (jamiSekundlar === 0 && soat === 0 && minut === 0 && sekund === 0) {
+                jamiSekundlar = -1; 
+            }
+
+            // Yangi vazifani array (ro'yxat) ning boshiga qo'shamiz
+            vazifalarBazasi.unshift({
+                matn: matn,
+                bajarildi: false,
+                qolganVaqt: jamiSekundlar
+            });
             
-            vazifaRoyxati.insertAdjacentHTML('afterbegin', li);
-            
+            // Inputlarni tozalash
             document.getElementById('yangi-vazifa').value = ''; 
-            document.getElementById('vazifa-vaqti').value = ''; 
+            document.getElementById('soat-kiritish').value = ''; 
+            document.getElementById('minut-kiritish').value = ''; 
+            document.getElementById('sekund-kiritish').value = ''; 
             
             vazifaSaqlash();
+            ekrangaVazifalarniChiqarish();
         }
 
-        // Vazifani bajarilgan qilib chizish funksiyasi
-        function bajarildiQilish(element) {
-            element.classList.toggle('completed'); // 'completed' klassini qo'shadi yoki olib tashlaydi
-            vazifaSaqlash(); // O'zgarishni xotiraga saqlaydi
+        function vazifaniOchirish(index) {
+            vazifalarBazasi.splice(index, 1); // Ro'yxatdan o'chirib tashlaydi
+            vazifaSaqlash();
+            ekrangaVazifalarniChiqarish();
+        }
+
+        function bajarildiQilish(index) {
+            vazifalarBazasi[index].bajarildi = !vazifalarBazasi[index].bajarildi; // True ni false, false ni true qiladi
+            vazifaSaqlash();
+            ekrangaVazifalarniChiqarish();
         }
 
         function vazifaSaqlash() {
-            localStorage.setItem('proVazifalarV2', vazifaRoyxati.innerHTML);
+            localStorage.setItem('proMaxVazifalar', JSON.stringify(vazifalarBazasi));
         }
 
-        // --- 3. TEZKOR QAYDLAR VA SAQLANGANLAR MANTIQI ---
+        // Sayt ishga tushganda vazifalarni ekranga chiqarish
+        ekrangaVazifalarniChiqarish();
+
+
+        // --- 3. TEZKOR QAYDLAR MANTIQI ---
         let qaydRoyxati = document.getElementById('qaydlar-royxati');
-        qaydRoyxati.innerHTML = localStorage.getItem('proQaydlarV2') || '';
+        qaydRoyxati.innerHTML = localStorage.getItem('proMaxQaydlar') || '';
 
         function qaydQoshish() {
             let qaydMatni = document.getElementById('bloknot').value;
@@ -171,7 +276,7 @@
                 <li>
                     <div class="content-box">
                         <span class="date-badge">Sana: ${sana}</span>
-                        <span class="task-text">${qaydMatni}</span>
+                        <span class="note-text">${qaydMatni}</span> 
                     </div>
                     <button class="delete-btn" onclick="this.parentElement.remove(); qaydSaqlash()">X</button>
                 </li>
@@ -184,7 +289,7 @@
         }
 
         function qaydSaqlash() {
-            localStorage.setItem('proQaydlarV2', qaydRoyxati.innerHTML);
+            localStorage.setItem('proMaxQaydlar', qaydRoyxati.innerHTML);
         }
     </script>
 
